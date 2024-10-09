@@ -2,8 +2,6 @@
 
 -module('update-swagger-url').
 
--export([main/1]).
-
 main(_) ->
   %% Define the path to the template and the output file
   TemplateFilePath = "priv/swagger/swagger-initializer.template",
