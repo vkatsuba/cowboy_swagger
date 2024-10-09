@@ -5,4 +5,5 @@ doc/
 .rebar3
 logs
 rebar3
-priv/swagger/swagger-initializer.js
+#/priv/swagger/swagger-initializer.js
+cowboy_swagger_hook*
