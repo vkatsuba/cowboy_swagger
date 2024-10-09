@@ -1,0 +1,32 @@
+%% Reading the contents of the file
+case file:read_file("priv/swagger/swagger-initializer.js") of
+    {ok, Content} ->
+        %% Get the configuration for the path from the application configuration
+        Path = application:get_env(cowboy_swagger, path, "/api-docs"),
+
+        %% Ensure Path is a binary (if it's a list, convert to binary)
+        BinPath = case is_binary(Path) of
+            true -> Path;
+            false -> list_to_binary(Path)
+        end,
+
+        %% Determine the path to the JavaScript file
+        FilePath = "priv/swagger/swagger-initializer.js",
+
+
+
+        %% Replace the placeholder in the file contents
+        %% Ensure both the placeholder and replacement are binaries
+        ModifiedContent = binary:replace(Content, <<"__SWAGGER_PATH__">>, <<"\'", BinPath/binary, "\'">>, [global]),
+
+        %% Write the updated file back
+        ok = file:write_file(FilePath, ModifiedContent),
+
+        %% Successfully complete hook execution
+
+        io:format("Swagger path updated to: ~s~n", [Path]),
+        CONFIG;
+    {error, Reason} ->
+        io:format("Failed to read swagger-initializer.js: ~p~n", [Reason]),
+        CONFIG
+end.
