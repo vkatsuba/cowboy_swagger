@@ -1,6 +1,6 @@
 #! /usr/bin/env escript
 
--module(update_swagger_url).
+-module('update-swagger-url').
 
 -export([main/1]).
 
