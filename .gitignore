@@ -6,4 +6,4 @@ doc/
 logs
 rebar3
 /priv/swagger/swagger-initializer.js
-cowboy_swagger_hook*
+cowboy_swagger_hook.beam
