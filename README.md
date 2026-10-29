@@ -40,20 +40,20 @@ For example, suppose that you have `example_echo_handler`, so it must implement 
 trails() ->
   Metadata =
     #{get =>
-      #{tags => ["echo"],
-        description => "Gets echo var from the server",
-        produces => ["text/plain"]
+      #{tags => [~"echo"],
+        description => ~"Gets echo var from the server",
+        produces => [~"text/plain"]
       },
       put =>
-      #{tags => ["echo"],
-        description => "Sets echo var in the server",
-        produces => ["text/plain"],
+      #{tags => [~"echo"],
+        description => ~"Sets echo var in the server",
+        produces => [~"text/plain"],
         parameters => [
-          #{name => <<"echo">>,
-            description => <<"Echo message">>,
-            in => <<"path">>,
+          #{name => ~"echo",
+            description => ~"Echo message",
+            in => ~"path",
             required => false,
-            type => <<"string">>}
+            type => ~"string"}
         ]
       }
     },
@@ -89,7 +89,6 @@ Then add `cowboy_swagger` to the list of apps to be loaded in your `*.app.src` f
   {applications,
    [kernel,
     stdlib,
-    jsx,
     cowboy,
     trails,
     cowboy_swagger
@@ -144,14 +143,14 @@ Additionally, `cowboy_swagger` can be configured/customized from a `*.config` fi
    %% `global_spec` for that server.
    {server_spec,
     #{my_server =>
-      #{swagger => "3.0",
-        info => #{title => "Example API"},
-        basePath => "/api-docs"
+      #{swagger => ~"2.0",
+        info => #{~"title" => ~"Example API"},
+        basePath => ~"/api-docs"
       },
       my_other_server =>
-      #{swagger => "3.0",
-        info => #{title => "Other API"},
-        basePath => "/api-docs"
+      #{openapi => ~"3.0.0",
+        info => #{~"title" => ~"Other API"},
+        basePath => ~"/api-docs"
       }
      }
     }
@@ -197,17 +196,17 @@ With `global_spec`
 [ ... % other configurations
 , { cowboy_swagger
   , [ { global_spec
-      , #{ swagger => "2.0"
-         , info => #{title => "My app API"}
+      , #{ swagger => ~"2.0"
+         , info => #{~"title" => ~"My app API"}
          , definitions => #{
-             "RequestBody" =>
-               #{ "name" =>
-                   #{ "type" => "string"
-                    , "description" => "Newspaper name"
+             ~"RequestBody" =>
+               #{ name =>
+                   #{ type => ~"string"
+                    , description => ~"Newspaper name"
                     }
-                , "description" =>
-                    #{ "type" => "string"
-                     , "description" => "Newspaper description"
+                , description =>
+                    #{ type => ~"string"
+                     , description => ~"Newspaper description"
                      }
                 }
            }
@@ -225,17 +224,17 @@ With `server_spec`
 , { cowboy_swagger
   , [ { server_spec
       , #{server =>
-          #{ swagger => "2.0"
-           , info => #{title => "My app API"}
+          #{ swagger => ~"2.0"
+           , info => #{~"title" => ~"My app API"}
            , definitions => #{
-               "RequestBody" =>
-                 #{ "name" =>
-                     #{ "type" => "string"
-                      , "description" => "Newspaper name"
+               ~"RequestBody" =>
+                 #{ name =>
+                     #{ type => ~"string"
+                      , description => ~"Newspaper name"
                       }
-                  , "description" =>
-                      #{ "type" => "string"
-                       , "description" => "Newspaper description"
+                  , description =>
+                      #{ type => ~"string"
+                       , description => ~"Newspaper description"
                        }
                   }
              }
@@ -255,15 +254,15 @@ directly in your handler or any other place you want.
 ```erlang
 -spec trails() -> trails:trails().
 trails() ->
-  DefinitionName = <<"RequestBody">>,
+  DefinitionName = ~"RequestBody",
   DefinitionProperties =
-    #{ <<"name">> =>
-         #{ type => <<"string">>
-          , description => <<"Newspaper name">>
+    #{ ~"name" =>
+         #{ type => ~"string"
+          , description => ~"Newspaper name"
           }
-     , <<"description">> =>
-         #{ type => <<"string">>
-          , description => <<"Newspaper description">>
+     , ~"description" =>
+         #{ type => ~"string"
+          , description => ~"Newspaper description"
           }
      },
   % Add the definition
@@ -275,15 +274,15 @@ trails() ->
 -spec trails() -> trails:trails().
 trails() ->
   Server = my_ranch_listener,
-  DefinitionName = <<"RequestBody">>,
+  DefinitionName = ~"RequestBody",
   DefinitionProperties =
-    #{ <<"name">> =>
-         #{ type => <<"string">>
-          , description => <<"Newspaper name">>
+    #{ ~"name" =>
+         #{ type => ~"string"
+          , description => ~"Newspaper name"
           }
-     , <<"description">> =>
-         #{ type => <<"string">>
-          , description => <<"Newspaper description">>
+     , ~"description" =>
+         #{ type => ~"string"
+          , description => ~"Newspaper description"
           }
      },
   % Add the definition
@@ -296,24 +295,24 @@ Now in your handler's trails callback function you can use it:
 ```erlang
 ...
   RequestBody =
-    #{ name => <<"request body">>
+    #{ name => ~"request body"
      , in => body
-     , description => <<"request body (as json)">>
+     , description => ~"request body (as json)"
      , required => true
        % Use the previously created `RequestBody' definition
-     , schema => cowboy_swagger:schema(<<"RequestBody">>)
+     , schema => cowboy_swagger:schema(~"RequestBody")
      },
   Metadata =
     #{ get =>
-       #{ tags => ["newspapers"]
-        , description => "Returns the list of newspapers"
-        , produces => ["application/json"]
+       #{ tags => [~"newspapers"]
+        , description => ~"Returns the list of newspapers"
+        , produces => [~"application/json"]
         }
      , post =>
-       # { tags => ["newspapers"]
-         , description => "Creates a new newspaper"
-         , consumes => ["application/json"]
-         , produces => ["application/json"]
+       # { tags => [~"newspapers"]
+         , description => ~"Creates a new newspaper"
+         , consumes => [~"application/json"]
+         , produces => [~"application/json"]
          , parameters => [RequestBody] % and then use that parameter here
          }
      },
